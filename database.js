@@ -1,4 +1,4 @@
-const sqlite3 = require('sqlite3');
+const sqlite3 = require('sqlite3').verbose();
 
 class Database {
   constructor(db_file_path) {
@@ -12,12 +12,23 @@ class Database {
   }
 
   createTable = () => {
-    console.log("create database table user");
     this.db.run("CREATE TABLE IF NOT EXISTS user(id INTEGER PRIMARY KEY, first_name TEXT, last_name TEXT, date_of_birth TEXT,  place_of_birth TEXT, code_postal TEXT, city TEXT, address TEXT)",  (err) => {if (err){
       console.log("Failed to create table");
     }});
   }
   
+  getUser = (user_id, cb) => {
+    return this.db.get("SELECT * FROM user WHERE id=?", user_id, function(err, row) {
+      if (err){
+        console.log('User not found')
+        return null
+      }
+      console.log(row)
+      cb(row)
+      return row
+    });
+  }
+
   insertUser = (user_id) => {
     this.db.run('INSERT INTO user (id) VALUES (?)', user_id, (err) => {
       if (err) {
@@ -26,13 +37,18 @@ class Database {
     });
   }
 
-  updateUser = (user_id, value, field_name) => {
-    sql = `UPDATE user SET ${field_name} = ? WHERE id = ?`;
-    this.db.run(sql, (value, user_id), (err) => {
+  updateUser = (user_id, value, field_name, callback) => {
+    const sql = `UPDATE user SET ${field_name} = ? WHERE id = ?`;
+    console.log(sql) 
+    this.db.run(sql, [value, user_id], (err) => {
       if (err) {
-        console.log("Update failed");
+        console.log("Update Failed");
+        callback(false)
         return false;
       }
+      console.log(this.changes)
+      console.log("Update Success");
+      callback(true)
       return true;
     }); 
   }
