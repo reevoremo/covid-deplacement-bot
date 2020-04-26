@@ -1,4 +1,4 @@
-FROM node:12.1.2
+FROM node:12.16.2
 
 # Create app directory
 WORKDIR /opt/services/node/src
