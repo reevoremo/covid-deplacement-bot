@@ -7,5 +7,5 @@ services:
     env_file:
       - /credentials/covid-bot/env_file
     volumes:
-      - /opt/covid-bot/data:/opt/services/node/src
+      - /opt/covid-bot/data/cvd.db:/opt/services/node/src/cvd.db
     restart: always

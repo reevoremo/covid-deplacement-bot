@@ -75,7 +75,7 @@ function get_user(ctx){
     'Adresse (Numero et Rue) : ' + user.address + '\n';
     'Ville : '+ user.city + '\n' +
     'Code Postal : ' + user.code_postal + '\n' +
-    
+
     ctx.reply(message)
   }
   );
@@ -111,12 +111,12 @@ function reponse_handler(ctx){
 
 const force_reply_markup = Markup.forceReply(true);
 
-const reasons = [{action: 'travail', label: 'Travail'}, 
-                  {action: 'courses', label: 'Courses'}, 
-                  {action: 'sante', label: 'Sante'}, 
-                  {action: 'famille', label: 'Famille'}, 
-                  {action: 'sport', label: 'Sport'}, 
-                  {action: 'judiciaire', label: 'Judiciaire'}, 
+const reasons = [{action: 'travail', label: 'Travail'},
+                  {action: 'courses', label: 'Courses'},
+                  {action: 'sante', label: 'Sante'},
+                  {action: 'famille', label: 'Famille'},
+                  {action: 'sport', label: 'Sport'},
+                  {action: 'judiciaire', label: 'Judiciaire'},
                   {action: 'missions', label: 'Missions'}, ]
 
 const reason_keyboard_buttons = reasons.map(reason => { return [Markup.callbackButton(reason.label, reason.action)]})
