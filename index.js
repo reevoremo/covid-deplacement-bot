@@ -78,6 +78,10 @@ async function get_cert(ctx, reason){
 
 function get_user(ctx){
   database.getUser(ctx.message.from.id, function(user){
+    if (!user){
+      ctx.reply('Envoyer /start pour commencer')
+      return
+    }
     message = 'Votre prénom : ' + user.first_name + '\n' +
     'Votre nom : ' + user.last_name + '\n' +
     'Date de naissance : ' + user.date_of_birth + '\n' +
