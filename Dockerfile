@@ -1,6 +1,13 @@
 FROM node:12.16.2
 
-# Create app directory
+ENV TZ=Europe/Paris
+
+RUN apk --update add \
+   	tzdata \
+   && cp /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+   && apk del tzdata
+
+
 WORKDIR /opt/services/node/src
 
 COPY package*.json /opt/services/node/src/
