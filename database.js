@@ -43,13 +43,7 @@ class Database {
     this.db.run(sql, [value, user_id], (err) => {
       if (err) {
         console.log("Update Failed");
-        callback(false)
-        return false;
       }
-      console.log(this.changes)
-      console.log("Update Success");
-      callback(true)
-      return true;
     }); 
   }
 }

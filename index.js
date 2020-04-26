@@ -2,49 +2,10 @@ const Telegraf = require('telegraf')
 const Extra = require('telegraf/extra')
 const Markup = require('telegraf/markup')
 const Database = require('./database')
+const generatePdf = require('./src/certs.js')
 
 const database = new Database('cvd.db')
 database.createTable()
-
-
-function get_cert(ctx){
-  user = database.getUser(ctx.message.from.id, function(user){
-    message = 'Votre prénom: ' + user.first_name + '\n' +
-    'Votre nom: ' + user.last_name + '\n' +
-    'Date de naissance: ' + user.date_of_birth + '\n' +
-    'Lieu de naissance: ' + user.place_of_birth + '\n' +
-    'Ville '+ user.city + '\n' +
-    'Code Postal: ' + user.code_postal + '\n' +
-    'Adresse: ' + user.address + '\n';
-    ctx.reply(message)
-  }
-  );
-}
-
-function get_user(ctx){
-  user = database.getUser(ctx.message.from.id, function(user){
-    message = 'Votre prénom: ' + user.first_name + '\n' +
-    'Votre nom: ' + user.last_name + '\n' +
-    'Date de naissance: ' + user.date_of_birth + '\n' +
-    'Lieu de naissance: ' + user.place_of_birth + '\n' +
-    'Ville '+ user.city + '\n' +
-    'Code Postal: ' + user.code_postal + '\n' +
-    'Adresse: ' + user.address + '\n';
-    ctx.reply(message)
-  }
-  );
-}
-
-async function add_user(user_id){
-  await database.insertUser(user_id);
-  user = await get_user(user_id)
-  return user.id;
-}
-
-function update_info(user_id, value, field_name, reply_callback){
-   database.updateUser(user_id, value, field_name, function(result){reply_callback(result);});
-}
-
 
 const input_vars = [
   {question: 'Votre prénom?', command: 'modifierPrenom', field_name: "first_name"},
@@ -56,6 +17,66 @@ const input_vars = [
   {question: 'Adresse?', command: 'modifierAdresse', field_name: "address"},
 ]
 
+function fill_missing(ctx){
+  database.getUser(ctx.message.from.id, function(user){
+    for (let i = 0; i < input_vars.length; i++) {
+      if (user[input_vars[i].field_name] === null) {
+        ctx.reply(input_vars[i].question,Extra.markup(force_reply_markup))
+        break;
+      }
+    }
+  });
+}
+
+async function get_cert(ctx){
+  database.getUser(ctx.message.from.id, async function(user){
+    let i = 0;
+    for (i = 0; i < input_vars.length; i++) {
+      if (user[input_vars[i].field_name] === null) {
+        ctx.reply(input_vars[i].question,Extra.markup(force_reply_markup))
+        break;
+      }
+    }
+    if (i === input_vars.length){
+      const profile = {
+        lastname: user.last_name,
+        firstname: user.first_name,
+        birthday: user.date_of_birth,
+        lieunaissance: user.place_of_birth,
+        address: user.address,
+        zipcode:user.code_postal,
+        town: user.city,
+        datesortie: '12/12/12',
+        heuresortie: '12:12'
+      }
+      file = await generatePdf(profile, 'sleep')
+      pdf = Buffer.from(file);
+      ctx.replyWithDocument({ source: pdf , filename: 'cert.pdf' })
+    }
+  });
+}
+
+function get_user(ctx){
+  database.getUser(ctx.message.from.id, function(user){
+    message = 'Votre prénom: ' + user.first_name + '\n' +
+    'Votre nom: ' + user.last_name + '\n' +
+    'Date de naissance: ' + user.date_of_birth + '\n' +
+    'Lieu de naissance: ' + user.place_of_birth + '\n' +
+    'Ville '+ user.city + '\n' +
+    'Code Postal: ' + user.code_postal + '\n' +
+    'Adresse: ' + user.address + '\n';
+    ctx.reply(message)
+  }
+  );
+}
+
+function add_user(user_id){
+  database.insertUser(user_id);
+}
+
+function update_info(user_id, value, field_name, reply_callback){
+   database.updateUser(user_id, value, field_name, function(result){reply_callback(result);});
+}
 
 function reponse_handler(ctx){
   if (ctx.message.reply_to_message){
@@ -66,6 +87,7 @@ function reponse_handler(ctx){
     } else {
       console.log("Q N F")
     }
+    fill_missing(ctx)
   }
   else
   {
@@ -79,7 +101,7 @@ const keyboard = Markup.inlineKeyboard([
   Markup.callbackButton('Delete', 'delete')
 ])
 
-const keyboard2 = Markup.forceReply(true);
+const force_reply_markup = Markup.forceReply(true);
 
 const help_message = 'HELP\n\nEdit firstname: /editFirstName\nEdit lastname: /editLastName\n'
 
@@ -88,7 +110,7 @@ bot.start((ctx) => ctx.reply(add_user(ctx.message.from.id)))
 bot.help((ctx) => ctx.reply(help_message))
 bot.command('verifier', (ctx) => get_user(ctx))
 bot.command('genererAttestation', (ctx) => get_cert(ctx))
-input_vars.map(input_var => bot.command(input_var.command, (ctx) => ctx.reply(input_var.question,Extra.markup(keyboard2))))
+input_vars.map(input_var => bot.command(input_var.command, (ctx) => ctx.reply(input_var.question,Extra.markup(force_reply_markup))))
 bot.on('message', (ctx) => reponse_handler(ctx))
 //bot.on('message', (ctx) => ctx.telegram.sendCopy(ctx.chat.id, ctx.message, Extra.markup(keyboard2)))
 bot.action('delete', ({ deleteMessage }) => deleteMessage())

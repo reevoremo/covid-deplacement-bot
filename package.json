@@ -1,6 +1,27 @@
 {
   "dependencies": {
+    "@babel/plugin-transform-runtime": "^7.9.0",
+    "pdf-lib": "^1.4.1",
+    "qrcode": "^1.4.4",
     "sqlite3": "^4.1.1",
     "telegraf": "^3.38.0"
-  }
+  },
+  "name": "covid-deplacement-bot",
+  "description": "",
+  "version": "1.0.0",
+  "main": "index.js",
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/reevoremo/covid-deplacement-bot.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/reevoremo/covid-deplacement-bot/issues"
+  },
+  "homepage": "https://github.com/reevoremo/covid-deplacement-bot#readme"
 }
