@@ -4,7 +4,7 @@ const Markup = require('telegraf/markup')
 const Database = require('./database')
 const generatePdf = require('./src/certs.js')
 
-const database = new Database('cvd.db')
+const database = new Database('database/cvd.db')
 database.createTable()
 
 const input_vars = [
