@@ -1,0 +1,11 @@
+version: '3.0'
+
+services:
+  node-app:
+    build: .
+    container_name: covid-bot
+    env_file:
+      - /credentials/covid-bot/env_file
+    volumes:
+      - /opt/covid-bot/data:/opt/services/node/src
+    restart: always
