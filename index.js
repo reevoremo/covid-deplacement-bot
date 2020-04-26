@@ -81,7 +81,7 @@ function get_user(ctx){
     'Lieu de naissance : ' + user.place_of_birth + '\n' +
     'Adresse (Numero et Rue) : ' + user.address + '\n' +
     'Ville : '+ user.city + '\n' +
-    'Code Postal : ' + user.code_postal + '\n' +
+    'Code Postal : ' + user.code_postal + '\n'
 
     ctx.reply(message)
   }
