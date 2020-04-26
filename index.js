@@ -130,10 +130,16 @@ const reasons = [{action: 'travail', label: 'Travail'},
 const reason_keyboard_buttons = reasons.map(reason => { return [Markup.callbackButton(reason.label, reason.action)]})
 const reason_keyboard = Markup.inlineKeyboard(reason_keyboard_buttons)
 
-const help_message = 'les commandes disponibles: \n\nEdit firstname: /editFirstName\nEdit lastname: /editLastName\n'
+let edit_commands = input_vars.map(input_var => { return '\n/' + input_var.command})
+
+let help_message = 'Les commandes disponibles\n\nModifier le profil:\n' + edit_commands + '\n\n'
+help_message = help_message + '/genererAttestation pour générer un certificat pour l\'heure actuelle\n'
+help_message = help_message + '/verifier Pour vérifier votre profil\n'
+help_message = help_message + '/help Pour trouver toutes ces commandes\n'
+
+
 
 const bot = new Telegraf(process.env.BOT_TOKEN)
-//bot.start((ctx) => ctx.reply(add_user(ctx.message.from.id)))
 bot.start((ctx) => add_user(ctx))
 bot.help((ctx) => ctx.reply(help_message))
 bot.command('verifier', (ctx) => get_user(ctx))

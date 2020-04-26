@@ -43,7 +43,6 @@ class Database {
 
   updateUser = (user_id, value, field_name, callback) => {
     const sql = `UPDATE user SET ${field_name} = ? WHERE id = ?`;
-    console.log(sql)
     this.db.run(sql, [value, user_id], (err) => {
       if (err) {
         console.log("Update Failed");
