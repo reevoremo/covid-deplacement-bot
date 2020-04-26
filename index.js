@@ -79,7 +79,7 @@ function get_user(ctx){
     'Votre nom : ' + user.last_name + '\n' +
     'Date de naissance : ' + user.date_of_birth + '\n' +
     'Lieu de naissance : ' + user.place_of_birth + '\n' +
-    'Adresse (Numero et Rue) : ' + user.address + '\n';
+    'Adresse (Numero et Rue) : ' + user.address + '\n' +
     'Ville : '+ user.city + '\n' +
     'Code Postal : ' + user.code_postal + '\n' +
 
@@ -133,7 +133,7 @@ const reason_keyboard = Markup.inlineKeyboard(reason_keyboard_buttons)
 let edit_commands = input_vars.map(input_var => { return '\n/' + input_var.command})
 
 let help_message = 'Les commandes disponibles\n\nModifier le profil:\n' + edit_commands + '\n\n'
-help_message = help_message + '/genererAttestation pour générer un certificat pour l\'heure actuelle\n'
+help_message = help_message + '/genererattestation pour générer un certificat pour l\'heure actuelle\n'
 help_message = help_message + '/verifier Pour vérifier votre profil\n'
 help_message = help_message + '/help Pour trouver toutes ces commandes\n'
 
@@ -143,7 +143,7 @@ const bot = new Telegraf(process.env.BOT_TOKEN)
 bot.start((ctx) => add_user(ctx))
 bot.help((ctx) => ctx.reply(help_message))
 bot.command('verifier', (ctx) => get_user(ctx))
-bot.command('genererAttestation', (ctx) => ctx.reply("Choisissez le motif de sortie", Extra.markup(reason_keyboard) ))
+bot.command('genererattestation', (ctx) => ctx.reply("Choisissez le motif de sortie", Extra.markup(reason_keyboard) ))
 input_vars.map(input_var => bot.command(input_var.command, (ctx) => ctx.reply(input_var.question,Extra.markup(force_reply_markup))))
 bot.on('message', (ctx) => reponse_handler(ctx))
 bot.action('delete', ({ deleteMessage }) => deleteMessage())
