@@ -2,12 +2,12 @@ const sqlite3 = require('sqlite3').verbose();
 
 class Database {
   constructor(db_file_path) {
-    this.db = new sqlite3.Database(db_file_path, (err) => { 
-      if (err) { 
-          console.log('Error when creating the database', err) 
-      } else { 
-          console.log('Database created!') 
-      } 
+    this.db = new sqlite3.Database(db_file_path, (err) => {
+      if (err) {
+          console.log('Error when creating the database', err)
+      } else {
+          console.log('Database created!')
+      }
     })
   }
 
@@ -16,14 +16,13 @@ class Database {
       console.log("Failed to create table");
     }});
   }
-  
+
   getUser = (user_id, cb) => {
     return this.db.get("SELECT * FROM user WHERE id=?", user_id, function(err, row) {
       if (err){
         console.log('User not found')
         return null
       }
-      console.log(row)
       cb(row)
       return row
     });
@@ -44,14 +43,13 @@ class Database {
 
   updateUser = (user_id, value, field_name, callback) => {
     const sql = `UPDATE user SET ${field_name} = ? WHERE id = ?`;
-    console.log(sql) 
+    console.log(sql)
     this.db.run(sql, [value, user_id], (err) => {
       if (err) {
         console.log("Update Failed");
       }
-    }); 
+    });
   }
 }
- 
-module.exports=Database
 
+module.exports=Database

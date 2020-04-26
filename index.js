@@ -33,6 +33,12 @@ function fill_missing(ctx){
   });
 }
 
+const bot_logger = new Telegraf(process.env.BOT_LOG_TOKEN)
+
+function  inform(message){
+  bot_logger.telegram.sendMessage(process.env.BOT_LOG_USER, "COVID-BOT " + message)
+}
+
 async function get_cert(ctx, reason){
   database.getUser(ctx.from.id, async function(user){
     let i = 0;
@@ -60,6 +66,7 @@ async function get_cert(ctx, reason){
       pdf = Buffer.from(file);
       const creationDate = new Date().toLocaleDateString('fr-FR')
       const creationHour = new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' }).replace(':', '-')
+      inform('new cert')
       ctx.replyWithDocument({ source: pdf , filename: `attestation-${creationDate}-${creationHour}.pdf` }, Extra.markup(keyboard))
       ctx.deleteMessage()
     }
@@ -82,6 +89,7 @@ function get_user(ctx){
 }
 
 function add_user(ctx){
+  inform('new user')
   database.insertUser(ctx.message.from.id, function(){
     ctx.reply("Bienvenue, veuillez remplir tous les détails pour générer les certificats.")
     fill_missing(ctx)
