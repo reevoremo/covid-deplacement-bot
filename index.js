@@ -29,7 +29,7 @@ function fill_missing(ctx){
         break;
       }
     }
-    ctx.reply("Profil complet.\nEnvoyer /genererAttestation ou tapez dessus.")
+    ctx.reply("Profil complet.\nEnvoyer /genererattestation ou tapez dessus.")
   });
 }
 
