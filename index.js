@@ -23,13 +23,16 @@ const keyboard = Markup.inlineKeyboard([
 
 function fill_missing(ctx){
   database.getUser(ctx.message.from.id, function(user){
-    for (let i = 0; i < input_vars.length; i++) {
+    let i = 0
+    for (i = 0; i < input_vars.length; i++) {
       if (user[input_vars[i].field_name] === null) {
         ctx.reply(input_vars[i].question,Extra.markup(force_reply_markup))
         break;
       }
     }
-    ctx.reply("Profil complet.\nEnvoyer /genererattestation ou tapez dessus.")
+    if (i == input_vars.length) {
+      ctx.reply("Profil complet.\nEnvoyer /genererattestation ou tapez dessus.")
+    }
   });
 }
 
@@ -100,6 +103,21 @@ function update_info(user_id, value, field_name, reply_callback){
    database.updateUser(user_id, value, field_name, function(result){reply_callback(result);});
 }
 
+function generate_cert_preflight(ctx){
+  database.getUser(ctx.message.from.id, function(user){
+    let i = 0
+    for (i = 0; i < input_vars.length; i++) {
+      if (user[input_vars[i].field_name] === null) {
+        ctx.reply(input_vars[i].question,Extra.markup(force_reply_markup))
+        break;
+      }
+    }
+    if (i == input_vars.length) {
+      ctx.reply("Choisissez le motif de sortie", Extra.markup(reason_keyboard))
+    }
+  });
+}
+
 function reponse_handler(ctx){
   if (ctx.message.reply_to_message){
     const question = ctx.message.reply_to_message.text;
@@ -143,7 +161,7 @@ const bot = new Telegraf(process.env.BOT_TOKEN)
 bot.start((ctx) => add_user(ctx))
 bot.help((ctx) => ctx.reply(help_message))
 bot.command('verifier', (ctx) => get_user(ctx))
-bot.command('genererattestation', (ctx) => ctx.reply("Choisissez le motif de sortie", Extra.markup(reason_keyboard) ))
+bot.command('genererattestation', (ctx) => generate_cert_preflight(ctx))
 input_vars.map(input_var => bot.command(input_var.command, (ctx) => ctx.reply(input_var.question,Extra.markup(force_reply_markup))))
 bot.on('message', (ctx) => reponse_handler(ctx))
 bot.action('delete', ({ deleteMessage }) => deleteMessage())
