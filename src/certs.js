@@ -1,5 +1,3 @@
-//import pdfBase from './certificate.pdf';
-//import { PDFDocument, StandardFonts } from 'pdf-lib';
 const pdf_lib = require('pdf-lib')
 const QRCode = require('qrcode')
 const fs = require('fs')

@@ -29,10 +29,15 @@ class Database {
     });
   }
 
-  insertUser = (user_id) => {
+  insertUser = (user_id, callback) => {
     this.db.run('INSERT INTO user (id) VALUES (?)', user_id, (err) => {
       if (err) {
         console.log("User already exist");
+        callback()
+      }
+      else
+      {
+        callback()
       }
     });
   }
