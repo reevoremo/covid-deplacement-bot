@@ -1,0 +1,6 @@
+---
+- hosts: servers
+  roles:
+    - { role: docker, tags: ["docker"]}
+    - { role: deploy-bot, tags: ["deploy"]}
+  become: true

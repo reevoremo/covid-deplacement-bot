@@ -1,0 +1,9 @@
+---
+
+- name: Getting updates from git
+  git:
+    repo: 'git@github.com:reevoremo/covid-deplacement-bot.git'
+    dest: ~/covid-bot/covid-deplacement-bot
+
+- name: Restarting server
+  shell: cd ~/covid-bot/covid-deplacement-bot && docker-compose up -d --build
