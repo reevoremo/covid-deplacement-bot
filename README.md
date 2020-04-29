@@ -1,5 +1,8 @@
 # covid-deplacement-bot
 
+The telegram bot, for those who want to test
+https://t.me/CovidDeplacementBot
+
 ## How to install
 
 ```console
