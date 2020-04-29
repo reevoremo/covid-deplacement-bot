@@ -14,9 +14,11 @@ $ npm i
 ### Developement
 
 Environment variables:
+```console
 BOT_TOKEN=<your bot token given by telegram>
 BOT_LOG_TOKEN=<bot token> # You can use the same, it informs when /start command is used and when cert is generated
 BOT_LOG_USER=<telegram user id> #Give your ID so you can get the 'new user' or 'new cert' alerts
+```
 
 Then run the application
 ```console
